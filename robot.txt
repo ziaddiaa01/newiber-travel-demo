@@ -1,3 +1,15 @@
+# robots.txt for NEWIBER Travel - Egypt Tours
 User-agent: *
 Allow: /
+
+
+# Allow CSS, JS, and images for better rendering
+Allow: /style/
+Allow: /js/
+Allow: /images/
+
+# Sitemap location 
 Sitemap: https://newiber-travel-demo.vercel.app/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
