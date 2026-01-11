@@ -1,15 +1,59 @@
 # robots.txt for NEWIBER Travel - Egypt Tours
+# Allow all search engines to crawl the site
+
 User-agent: *
 Allow: /
 
+# Disallow admin or private directories (add as needed)
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/
+Disallow: /cgi-bin/
 
-# Allow CSS, JS, and images for better rendering
+# Allow crawling of CSS and JS for better rendering
 Allow: /style/
 Allow: /js/
 Allow: /images/
 
-# Sitemap location 
+# Sitemap location (REPLACE WITH YOUR VERCEL URL!)
 Sitemap: https://newiber-travel-demo.vercel.app/sitemap.xml
 
-# Crawl-delay for polite crawling
+# Crawl-delay for polite crawling (optional)
 Crawl-delay: 1
+
+# Specific rules for major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Block bad bots (optional - add specific bad bots if needed)
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+# Mobile-specific crawlers
+User-agent: Googlebot-Mobile
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /images/
+
+# Allow social media crawlers for proper sharing
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
