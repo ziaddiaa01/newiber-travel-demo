@@ -1,0 +1,328 @@
+ @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap');
+
+
+
+
+
+
+  
+        body { font-family: 'IBM Plex Sans Arabic', sans-serif; }
+        .bg-navy { background-color: #114684; }
+        .text-cyan { color: #24B4F2; }
+
+
+
+        :root {
+            --brand-green: #11468499;
+            --dark-slate: #334155;
+        }
+
+       
+
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap');
+
+    :root {
+        --figma-blue-dark: #114684;
+        --figma-blue-light: #00ADEE;
+        --figma-cta: #2CACE3;
+        --figma-vip: #24B4F2;
+    }
+
+    .figma-header {
+        /* Layout Properties from your CSS */
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 64px;
+        background-color: #143254c7;
+        /* Positioning & Size */
+        width: 100%;
+        height: 107px;
+        margin: 0 auto; /* Centered on page */
+        position: relative;
+        z-index: 50;
+    }
+
+    /* Logo Frame (Frame 8) */
+    .logo-frame {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        width: 150px;
+        height: 75px;
+    }
+
+    /* Navigation Container (Frame 2) */
+    .nav-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 24px;
+        flex-grow: 1;
+    }
+
+    /* Menu Links (Frame 1) */
+    .menu-links {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 62px;
+    }
+
+    .nav-link {
+        font-family: 'IBM Plex Sans Arabic', sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
+        color: #FFFFFF;
+        text-decoration: none;
+        transition: opacity 0.3s;
+    }
+
+    /* VIP Elite Specific Style */
+    .vip-link {
+        color: var(--figma-vip);
+        font-weight: 700;
+        position: relative;
+    }
+
+    /* CTA Button (CTA Header) */
+    .cta-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 12px 48px;
+        width: 189px;
+        height: 52px;
+        background: var(--figma-cta);
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .cta-text {
+        font-family: 'IBM Plex Sans Arabic', sans-serif;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 28px;
+        color: #FFFEFE;
+    }
+
+    /* Card Flip Container */
+.flip-card {
+  background-color: transparent;
+  width: 100%;
+  height: 400px;
+  perspective: 1000px; /* Essential for 3D effect */
+    cursor: pointer;
+
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+/* Remove the previous hover trigger: .flip-card:hover .flip-card-inner */
+
+/* New Click Trigger Class */
+.flip-card-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden; /* Hide back during front view */
+  backface-visibility: hidden;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Front Side Styling */
+.flip-card-front {
+  background-color: #fff;
+}
+
+/* Back Side Styling */
+.flip-card-back {
+  background-color: #114684; /* Using your Figma brand blue */
+  color: white;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+    .cta-header:hover {
+        transform: scale(1.05);
+        background: #24B4F2;
+    }
+        /* Hero Styling */
+        /* Hero Section with Overlay */
+        .hero-section {
+            background:
+                /* The Overlay: 50% black on the left, fading to 20% on the right */
+                linear-gradient(90deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 100%),
+                /* The Background Image */
+url('https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&q=80&w=2000');            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Enhancing the text shadow for extra readability */
+        .hero-section h1 {
+            text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-section p {
+            text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Matching the "Explore" buttons from image */
+        .btn-explore {
+            border: 2px solid var(--brand-green);
+            color: #11468499;
+            padding: 5px 25px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        /* Input styling to match the light grey borders */
+        .custom-input {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25d366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        /* Animation States */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Pyramid Entrance */
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-animate {
+            animation: slideUpFade 1.2s ease-out forwards;
+        }
+
+        /* Staggered Delay for Cards */
+        .delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .delay-2 {
+            transition-delay: 0.3s;
+        }
+
+        .delay-3 {
+            transition-delay: 0.5s;
+        }
+
+
+        /* Social Icon Styling */
+.social-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.social-icon:hover {
+    transform: translateY(-5px);
+    color: white !important;
+}
+
+/* Specific Platform Colors */
+.fb { color: #1877F2; }
+.fb:hover { background: #1877F2; }
+
+.ig { color: #E4405F; }
+.ig:hover { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%); }
+
+.tt { color: #000000; }
+.tt:hover { background: #000000; }
+
+/* X (formerly Twitter) Specific Styling */
+.x-logo :hover{ 
+    color: #000000; /* Standard black icon */
+}
+.x-icon:hover{
+    fill: white;
+}
+.x-icon{
+    width: 30px;
+    height: 30px;
+}
+
+
+.x-logo:hover { 
+    background: #000000; /* Black background on hover */
+    color: #ffffff !important; /* White icon on hover */
+    transform: translateY(-5px) rotate(360deg); /* Special spin effect for X */
+}
+
+/* Ensure Font Awesome is loaded for the X icon */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css');
