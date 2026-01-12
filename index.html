@@ -22,22 +22,22 @@
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://newiber-travel-demo.vercel.app/">
+    <meta property="og:url" content="https://newiber.com/">
     <meta property="og:title" content="Egypt Tours & Nile Cruises 2026 | NEWIBER Travel">
     <meta property="og:description" content="Discover luxury Egypt tours, Nile cruises, and Pyramids packages. Expert Egypt travel agency offering customized Cairo tours, Luxor trips & Red Sea holidays.">
-    <meta property="og:image" content="https://newiber-travel-demo.vercel.app/images/Nile-Cruise1.png">
+    <meta property="og:image" content="https://newiber.com/images/egypt-tours-social.jpg">
     <meta property="og:locale" content="en_US">
     <meta property="og:site_name" content="NEWIBER Travel">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://newiber-travel-demo.vercel.app/">
+    <meta name="twitter:url" content="https://newiber.com/">
     <meta name="twitter:title" content="Egypt Tours & Nile Cruises 2026 | NEWIBER Travel">
     <meta name="twitter:description" content="Discover luxury Egypt tours, Nile cruises, and Pyramids packages. Expert Egypt travel agency offering customized Cairo tours.">
-    <meta name="twitter:image" content="https://newiber-travel-demo.vercel.app/images/Nile-Cruise1.png">
+    <meta name="twitter:image" content="https://newiber.com/images/egypt-tours-social.jpg">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://newiber-travel-demo.vercel.app/">
+    <link rel="canonical" href="https://newiber.com/">
     
     <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
@@ -54,7 +54,7 @@
         "@context": "https://schema.org",
         "@type": "TravelAgency",
         "name": "NEWIBER Travel",
-        "image": "https://newiber-travel-demo.vercel.app/images/LOGO.svg",
+        "image": "https://newiber.com/images/LOGO.svg",
         "url": "https://newiber.com",
         "telephone": "+20-106-914-3052",
         "address": {
@@ -104,20 +104,49 @@
 </head>
 <body class="bg-[#f3f4f6]">
     <!-- Header with Semantic Navigation -->
-    <header class="figma-header" role="banner">
-        <div class="logo-frame">
-            <a href="./index.html" aria-label="NEWIBER Travel Homepage - Egypt Tours & Nile Cruises">
-                <img src="./images/LOGO.svg" alt="NEWIBER Travel Logo - Egypt Tour Operator" width="150" height="75" style="object-fit: contain;">
-            </a>
-        </div>
-        <nav class="nav-container" role="navigation" aria-label="Main navigation">
-            <div class="menu-links">
-                <a href="./index.html" class="nav-link" aria-current="page">Home</a>
-                <a href="#egypt-tour-packages" class="whitespace-nowrap nav-link">Our Packages</a>
-                <a href="./about.html" class="whitespace-nowrap  nav-link">About Us</a>
+    <header class="bg-white shadow-lg fixed w-full z-50 top-0 left-0">
+    <nav class="max-w-6xl mx-auto px-4" aria-label="Main Navigation">
+        <div class="flex justify-between items-center h-20">
+            
+            <div class="flex-shrink-0 flex items-center">
+                <a href="index.html" class="flex items-center" title="NEWIBER Travel - Home">
+                    <img src="./images/LOGO.svg" 
+                         alt="NEWIBER Travel Egypt - Luxury Nile Cruises and Cairo Tours" 
+                         class="h-12 w-auto"
+                         width="150" 
+                         height="50">
+                </a>
             </div>
-        </nav>
-    </header>
+
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="index.html" class="text-[#114684] font-bold hover:text-[#00ADEE] transition duration-300">Home</a>
+                <a href="#programs" class="text-[#114684] font-bold hover:text-[#00ADEE] transition duration-300">Egypt Tour Packages</a>
+                <a href="about.html" class="text-[#114684] font-bold hover:text-[#00ADEE] transition duration-300">About Our Experts</a>
+            </div>
+
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-button" 
+                        class="outline-none mobile-menu-button" 
+                        aria-label="Open Service Menu"
+                        aria-expanded="false">
+                    <svg class="w-8 h-8 text-[#114684]" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-inner">
+        <div class="px-4 pt-2 pb-6 space-y-1">
+            <a href="index.html" class="block py-3 px-4 text-sm font-bold text-[#114684] hover:bg-gray-50 rounded">Home</a>
+            <a href="#programs" class="block py-3 px-4 text-sm font-bold text-[#114684] hover:bg-gray-50 rounded">View Egypt Itineraries</a>
+            <a href="about.html" class="block py-3 px-4 text-sm font-bold text-[#114684] hover:bg-gray-50 rounded">About NEWIBER</a>
+        </div>
+    </div>
+</header>
+
+<div class="h-20"></div>
 
     <!-- Hero Section with SEO-Optimized Content -->
     <main>
@@ -455,6 +484,22 @@
                 }
             }
         });
+
+
+        // تشغيل قائمة الموبايل
+const btn = document.getElementById('mobile-menu-button');
+const menu = document.getElementById('mobile-menu');
+
+btn.addEventListener('click', () => {
+    menu.classList.toggle('hidden');
+});
+
+// إغلاق القائمة عند الضغط على أي رابط (مهم للموبايل)
+document.querySelectorAll('#mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        menu.classList.add('hidden');
+    });
+});
     </script>
 </body>
 </html>
