@@ -1,0 +1,359 @@
+# NEWIBER Travel API Documentation
+
+## Overview
+This API powers the NEWIBER Travel corporate website. It provides public endpoints for retrieving services, testimonials, FAQs, and submitting contact inquiries, as well as protected admin endpoints for managing content. Authentication is handled via JWT stored in HTTP-only cookies.
+
+**Base URL:** `https://api.newiber.com` (development: `http://localhost:5000`)
+
+**Authentication:** 
+- Admin endpoints require a valid JWT token sent via HTTP-only cookie (set during login) or Authorization header (Bearer token). 
+- Public endpoints do not require authentication.
+
+**Response Format:** All responses are JSON.
+
+---
+
+## Public Endpoints
+
+### 1. Get All Services
+Retrieves a list of all services (both standard and VIP), sorted by the `order` field.
+
+- **URL:** `/api/services`
+- **Method:** `GET`
+- **Success Response:** `200 OK`
+  ```json
+  [
+    {
+      "_id": "60d21b4667d0d8992e610c85",
+      "title": "Luxury Nile Cruises",
+      "description": "Experience the magic of the Nile aboard our premium cruise ships...",
+      "icon": "fa-ship",
+      "imageUrl": "/images/nile-cruise.jpg",
+      "isVip": true,
+      "order": 1,
+      "createdAt": "2023-01-01T00:00:00.000Z",
+      "updatedAt": "2023-01-01T00:00:00.000Z"
+    }
+  ]
+  ```
+
+### 2. Get Single Service
+Retrieves details of a specific service by ID.
+
+- **URL:** `/api/services/:id`
+- **Method:** `GET`
+- **URL Params:** `id=[string]` (MongoDB ObjectId)
+- **Success Response:** `200 OK`
+  ```json
+  {
+    "_id": "60d21b4667d0d8992e610c85",
+    "title": "Luxury Nile Cruises",
+    "description": "Experience the magic of the Nile aboard our premium cruise ships...",
+    "icon": "fa-ship",
+    "imageUrl": "/images/nile-cruise.jpg",
+    "isVip": true,
+    "order": 1,
+    "createdAt": "2023-01-01T00:00:00.000Z",
+    "updatedAt": "2023-01-01T00:00:00.000Z"
+  }
+  ```
+- **Error Response:** `404 Not Found` if service not found.
+
+### 3. Get All Testimonials
+Retrieves visible testimonials.
+
+- **URL:** `/api/testimonials`
+- **Method:** `GET`
+- **Success Response:** `200 OK`
+  ```json
+  [
+    {
+      "_id": "60d21b4667d0d8992e610c86",
+      "clientName": "Ahmed Hassan",
+      "clientTitle": "Business Traveler",
+      "content": "NEWIBER made my business trip to Cairo seamless...",
+      "rating": 5,
+      "imageUrl": "/images/client1.jpg",
+      "createdAt": "2023-01-01T00:00:00.000Z",
+      "updatedAt": "2023-01-01T00:00:00.000Z"
+    }
+  ]
+  ```
+
+### 4. Get All FAQs
+Retrieves visible FAQs sorted by `order`.
+
+- **URL:** `/api/faqs`
+- **Method:** `GET`
+- **Success Response:** `200 OK`
+  ```json
+  [
+    {
+      "_id": "60d21b4667d0d8992e610c87",
+      "question": "How do I book a service?",
+      "answer": "You can contact us via WhatsApp, phone, or the contact form...",
+      "order": 1,
+      "createdAt": "2023-01-01T00:00:00.000Z",
+      "updatedAt": "2023-01-01T00:00:00.000Z"
+    }
+  ]
+  ```
+
+### 5. Submit Contact Inquiry
+Submits a contact form message. Rate limited to 5 requests per hour per IP.
+
+- **URL:** `/api/contact`
+- **Method:** `POST`
+- **Headers:** `Content-Type: application/json`
+- **Body:**
+  ```json
+  {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone": "+201234567890",
+    "message": "I'm interested in your VIP services.",
+    "serviceInterest": "VIP Services"
+  }
+  ```
+- **Success Response:** `201 Created`
+  ```json
+  {
+    "message": "Message sent successfully"
+  }
+  ```
+- **Error Response:** `429 Too Many Requests` if rate limit exceeded.
+
+---
+
+## Authentication Endpoints
+
+### 1. Admin Login
+Authenticates an admin user and sets HTTP-only cookies containing JWT and refresh token.
+
+- **URL:** `/api/auth/login`
+- **Method:** `POST`
+- **Headers:** `Content-Type: application/json`
+- **Body:**
+  ```json
+  {
+    "email": "admin@newiber.com",
+    "password": "SecurePass123!"
+  }
+  ```
+- **Success Response:** `200 OK`
+  ```json
+  {
+    "_id": "60d21b4667d0d8992e610c88",
+    "email": "admin@newiber.com",
+    "role": "admin"
+  }
+  ```
+  Also sets `token` (15 min) and `refreshToken` (7 days) as HTTP-only cookies.
+- **Error Response:** `401 Unauthorized` if credentials invalid.
+
+### 2. Refresh Token
+Obtains a new access token using the refresh token cookie.
+
+- **URL:** `/api/auth/refresh`
+- **Method:** `POST`
+- **Success Response:** `200 OK`
+  ```json
+  {
+    "message": "Token refreshed"
+  }
+  ```
+  Sets new `token` cookie.
+- **Error Response:** `401 Unauthorized` if refresh token missing or invalid.
+
+### 3. Logout
+Clears authentication cookies.
+
+- **URL:** `/api/auth/logout`
+- **Method:** `POST`
+- **Success Response:** `200 OK`
+  ```json
+  {
+    "message": "Logged out"
+  }
+  ```
+
+### 4. Get Current User
+Returns information about the currently authenticated admin user.
+
+- **URL:** `/api/auth/me`
+- **Method:** `GET`
+- **Authentication:** Required (cookie or Bearer token)
+- **Success Response:** `200 OK`
+  ```json
+  {
+    "_id": "60d21b4667d0d8992e610c88",
+    "email": "admin@newiber.com",
+    "role": "admin"
+  }
+  ```
+- **Error Response:** `401 Unauthorized` if not authenticated.
+
+---
+
+## Admin Endpoints (Protected)
+All admin endpoints require a valid JWT (via cookie) and the user must have role `admin`. Base path: `/api/admin`
+
+### 1. Services Management
+
+#### Get All Services (Admin)
+- **URL:** `/api/admin/services`
+- **Method:** `GET`
+- **Success Response:** `200 OK` (array of services, same as public but includes all, regardless of visibility)
+
+#### Create a Service
+- **URL:** `/api/admin/services`
+- **Method:** `POST`
+- **Headers:** `Content-Type: application/json`
+- **Body:**
+  ```json
+  {
+    "title": "New Service",
+    "description": "Description here",
+    "icon": "fa-icon",
+    "imageUrl": "/images/service.jpg",
+    "isVip": false,
+    "order": 5
+  }
+  ```
+- **Success Response:** `201 Created` (returns created service)
+
+#### Update a Service
+- **URL:** `/api/admin/services/:id`
+- **Method:** `PUT`
+- **Headers:** `Content-Type: application/json`
+- **Body:** (any fields to update)
+- **Success Response:** `200 OK` (updated service)
+
+#### Delete a Service
+- **URL:** `/api/admin/services/:id`
+- **Method:** `DELETE`
+- **Success Response:** `200 OK`
+  ```json
+  {
+    "message": "Service removed"
+  }
+  ```
+
+### 2. Testimonials Management
+
+#### Get All Testimonials (Admin)
+- **URL:** `/api/admin/testimonials`
+- **Method:** `GET`
+
+#### Create a Testimonial
+- **URL:** `/api/admin/testimonials`
+- **Method:** `POST`
+- **Body:**
+  ```json
+  {
+    "clientName": "Jane Smith",
+    "clientTitle": "CEO",
+    "content": "Great service!",
+    "rating": 5,
+    "imageUrl": "/images/jane.jpg",
+    "isVisible": true
+  }
+  ```
+
+#### Update a Testimonial
+- **URL:** `/api/admin/testimonials/:id`
+- **Method:** `PUT`
+
+#### Delete a Testimonial
+- **URL:** `/api/admin/testimonials/:id`
+- **Method:** `DELETE`
+
+### 3. FAQs Management
+
+#### Get All FAQs (Admin)
+- **URL:** `/api/admin/faqs`
+- **Method:** `GET`
+
+#### Create an FAQ
+- **URL:** `/api/admin/faqs`
+- **Method:** `POST`
+- **Body:**
+  ```json
+  {
+    "question": "New question?",
+    "answer": "New answer.",
+    "order": 6,
+    "isVisible": true
+  }
+  ```
+
+#### Update an FAQ
+- **URL:** `/api/admin/faqs/:id`
+- **Method:** `PUT`
+
+#### Delete an FAQ
+- **URL:** `/api/admin/faqs/:id`
+- **Method:** `DELETE`
+
+### 4. Contacts Management
+
+#### Get All Contact Submissions
+- **URL:** `/api/admin/contacts`
+- **Method:** `GET`
+- **Query Params (optional):** `?isRead=false` to filter unread
+- **Success Response:** `200 OK` (array of contacts)
+
+#### Mark Contact as Read
+- **URL:** `/api/admin/contacts/:id/read`
+- **Method:** `PATCH`
+- **Body (optional):** `{ "isRead": true }` (defaults to true)
+- **Success Response:** `200 OK` (updated contact)
+
+#### Delete a Contact Submission
+- **URL:** `/api/admin/contacts/:id`
+- **Method:** `DELETE`
+
+---
+
+## Error Handling
+All error responses follow this format:
+
+```json
+{
+  "message": "Error description"
+}
+```
+
+Common HTTP status codes:
+- `400 Bad Request` – Invalid input (e.g., missing required fields)
+- `401 Unauthorized` – Missing or invalid authentication
+- `403 Forbidden` – Authenticated but not admin
+- `404 Not Found` – Resource not found
+- `429 Too Many Requests` – Rate limit exceeded
+- `500 Internal Server Error` – Server-side error
+
+---
+
+## Rate Limiting
+- Public contact form: 5 requests per hour per IP
+- Auth endpoints (login, refresh): 10 requests per 15 minutes per IP
+- Other endpoints: 100 requests per 15 minutes per IP
+
+---
+
+## Authentication Flow
+1. Admin logs in via `/api/auth/login` – server sets `token` and `refreshToken` cookies.
+2. Subsequent requests automatically include cookies.
+3. When `token` expires, client can call `/api/auth/refresh` to get a new token (refresh token cookie must be present).
+4. Logout clears both cookies.
+
+**Note:** For development with frontend on different origin, ensure `withCredentials: true` is set in axios/fetch.
+
+---
+
+## Postman Collection
+You can import the following OpenAPI specification into Postman or other tools. (Optional to include a link or provide as separate file.)
+
+---
+
+This documentation covers all planned endpoints. Let me know if you need examples for specific edge cases or additional details!
