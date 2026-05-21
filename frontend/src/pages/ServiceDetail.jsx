@@ -3,7 +3,7 @@ import { useLoaderData, Link, useLocation } from 'react-router-dom';
 import DynamicHeader from '../components/DynamicHeader';
 import Footer from '../components/Footer';
 import pyramids from '../assets/pyramids.png';
-import { imageMap } from '../utils/imageRegistry';
+import { masterImageMap } from '../utils/imageRegistry';
 import ServiceList from '../components/ServiceList'; 
 
 const ServiceDetail = () => {
@@ -26,7 +26,7 @@ const ServiceDetail = () => {
       <section className="pt-24 px-6 md:px-16 container mx-auto">
         <div className="w-full aspect-[21/9] overflow-hidden rounded-sm mb-12 shadow-sm">
           <img 
-            src={imageMap[service.imageUrl] || service.imageUrl || '/images/default-service.jpg'} 
+            src={masterImageMap[service.imageUrl] || service.imageUrl || '/images/default-service.jpg'} 
             className="w-full h-full object-cover" 
             alt={service.title} 
           />
