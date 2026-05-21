@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { FaChevronDown } from 'react-icons/fa';
+import { FaChevronDown } from 'react-icons/fa6';
 
 const HeaderNav = ({ variant }) => {
   // Logic for dynamic base colors based on your header type (Transparent vs White)
