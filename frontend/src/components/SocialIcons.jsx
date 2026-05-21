@@ -1,4 +1,4 @@
-import { FaWhatsapp, FaFacebookF, FaInstagram, FaTiktok } from 'react-icons/fa';
+import { FaWhatsapp, FaFacebookF, FaInstagram, FaTiktok } from 'react-icons/fa6';
 
 
 const SocialIcons = ({ variant }) => {
