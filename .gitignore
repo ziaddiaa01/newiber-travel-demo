@@ -1,9 +1,0 @@
-# This ignores node_modules in any subfolder (frontend, backend, etc.)
-node_modules/
-
-# Ignore environment variables
-.env
-
-# Ignore build folders
-frontend/build/
-frontend/dist/
