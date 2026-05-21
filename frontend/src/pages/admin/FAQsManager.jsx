@@ -15,68 +15,78 @@ const FAQsManager = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editing) {
-      await updateAdminFAQ(editing, form);
-    } else {
-      await createAdminFAQ(form);
-    }
+    editing ? await updateAdminFAQ(editing, form) : await createAdminFAQ(form);
     resetForm();
     revalidator.revalidate();
   };
 
-  const resetForm = () => {
-    setEditing(null);
-    setForm({ question: '', answer: '', order: 0, isVisible: true });
-  };
-
-  const handleEdit = (faq) => {
-    setEditing(faq._id);
-    setForm(faq);
-  };
-
+  const resetForm = () => { setEditing(null); setForm({ question: '', answer: '', order: 0, isVisible: true }); };
+  const handleEdit = (f) => { setEditing(f._id); setForm(f); };
   const handleDelete = async (id) => {
-    if (window.confirm('Delete this FAQ?')) {
-      await deleteAdminFAQ(id);
-      revalidator.revalidate();
-    }
+    if (window.confirm('Delete this FAQ?')) { await deleteAdminFAQ(id); revalidator.revalidate(); }
   };
+
+  const inputClass = "w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-[#0184c7] focus:ring-1 focus:ring-[#0184c7] transition";
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Manage FAQs</h1>
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow mb-8">
-        <h2 className="text-xl font-semibold mb-4">{editing ? 'Edit' : 'Add'} FAQ</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <input name="question" placeholder="Question" value={form.question} onChange={handleChange} className="border p-2 rounded col-span-2" required />
-          <textarea name="answer" placeholder="Answer" value={form.answer} onChange={handleChange} className="border p-2 rounded col-span-2" rows="3" required />
-          <input name="order" type="number" placeholder="Display order" value={form.order} onChange={handleChange} className="border p-2 rounded" />
-          <label className="flex items-center">
-            <input type="checkbox" name="isVisible" checked={form.isVisible} onChange={handleChange} className="mr-2" />
-            Visible
+      <h1 className="text-2xl md:text-3xl font-bold text-[#0F2D52] mb-8">Manage FAQs</h1>
+
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+        <h2 className="text-lg font-semibold text-[#0F2D52] mb-5 pb-3 border-b border-gray-100">
+          {editing ? 'Edit' : 'Add'} FAQ
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input name="question" placeholder="Question" value={form.question} onChange={handleChange} className={`${inputClass} md:col-span-2`} required />
+          <textarea name="answer" placeholder="Answer" value={form.answer} onChange={handleChange} className={`${inputClass} md:col-span-2`} rows="3" required />
+          <input name="order" type="number" placeholder="Display order" value={form.order} onChange={handleChange} className={inputClass} />
+          <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+            <input type="checkbox" name="isVisible" checked={form.isVisible} onChange={handleChange} className="w-4 h-4 accent-[#0184c7]" />
+            Visible on site
           </label>
         </div>
-        <button type="submit" className="mt-4 bg-blue-600 text-white px-4 py-2 rounded">{editing ? 'Update' : 'Add'}</button>
-        {editing && <button type="button" onClick={resetForm} className="ml-2 bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>}
-      </form>
+        <div className="mt-5 flex gap-3">
+          <button onClick={handleSubmit} className="px-6 py-2.5 bg-[#0184c7] text-white text-sm rounded-lg hover:bg-[#016da5] transition font-medium">
+            {editing ? 'Update' : 'Add'} FAQ
+          </button>
+          {editing && (
+            <button onClick={resetForm} className="px-6 py-2.5 bg-gray-100 text-gray-600 text-sm rounded-lg hover:bg-gray-200 transition font-medium">
+              Cancel
+            </button>
+          )}
+        </div>
+      </div>
 
-      <table className="min-w-full bg-white border">
-        <thead>
-          <tr><th className="border p-2">Order</th><th className="border p-2">Question</th><th className="border p-2">Visible</th><th className="border p-2">Actions</th></tr>
-        </thead>
-        <tbody>
-          {faqs.data?.map(f => (
-            <tr key={f._id}>
-              <td className="border p-2 text-center">{f.order}</td>
-              <td className="border p-2">{f.question}</td>
-              <td className="border p-2 text-center">{f.isVisible ? '✅' : '❌'}</td>
-              <td className="border p-2">
-                <button onClick={() => handleEdit(f)} className="text-blue-600 mr-2">Edit</button>
-                <button onClick={() => handleDelete(f._id)} className="text-red-600">Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="min-w-full">
+            <thead>
+              <tr className="bg-[#0F2D52]">
+                {['Order', 'Question', 'Visible', 'Actions'].map(h => (
+                  <th key={h} className="px-6 py-4 text-left text-xs font-medium text-white/70 uppercase tracking-wider">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {faqs.data?.map(f => (
+                <tr key={f._id} className="hover:bg-[#f0f7ff] transition">
+                  <td className="px-6 py-4 text-sm text-gray-500">{f.order}</td>
+                  <td className="px-6 py-4 text-sm text-[#0F2D52] font-medium max-w-xs truncate">{f.question}</td>
+                  <td className="px-6 py-4">
+                    <span className={`px-2 py-1 text-xs rounded-full font-medium ${f.isVisible ? 'bg-[#e8f4fd] text-[#0184c7]' : 'bg-gray-100 text-gray-400'}`}>
+                      {f.isVisible ? 'Visible' : 'Hidden'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 flex gap-3">
+                    <button onClick={() => handleEdit(f)} className="text-xs font-medium text-[#0184c7] hover:text-[#016da5]">Edit</button>
+                    <button onClick={() => handleDelete(f._id)} className="text-xs font-medium text-red-500 hover:text-red-700">Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };
