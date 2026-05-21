@@ -1,6 +1,18 @@
 import { useEffect, useState } from 'react';
 import { getAdminServices, getAdminTestimonials, getAdminFAQs, getAdminContacts } from '../../services/api';
 
+const StatCard = ({ label, value, icon, accent }) => (
+  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4">
+    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${accent}`}>
+      {icon}
+    </div>
+    <div>
+      <p className="text-xs text-gray-400 uppercase tracking-widest font-medium">{label}</p>
+      <p className="text-3xl font-bold text-[#0F2D52] mt-0.5">{value}</p>
+    </div>
+  </div>
+);
+
 const Dashboard = () => {
   const [stats, setStats] = useState({ services: 0, testimonials: 0, faqs: 0, unreadContacts: 0 });
 
@@ -21,12 +33,14 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-      <div className="grid grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded shadow"><h2>Services</h2><p className="text-2xl">{stats.services}</p></div>
-        <div className="bg-white p-4 rounded shadow"><h2>Testimonials</h2><p className="text-2xl">{stats.testimonials}</p></div>
-        <div className="bg-white p-4 rounded shadow"><h2>FAQs</h2><p className="text-2xl">{stats.faqs}</p></div>
-        <div className="bg-white p-4 rounded shadow"><h2>Unread Messages</h2><p className="text-2xl text-red-600">{stats.unreadContacts}</p></div>
+      <h1 className="text-2xl md:text-3xl font-bold text-[#0F2D52] mb-2">Dashboard</h1>
+      <p className="text-gray-400 text-sm mb-8">Welcome back, here's what's happening.</p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <StatCard label="Services" value={stats.services} icon="🛎️" accent="bg-[#e8f4fd]" />
+        <StatCard label="Testimonials" value={stats.testimonials} icon="⭐" accent="bg-[#fff8e1]" />
+        <StatCard label="FAQs" value={stats.faqs} icon="❓" accent="bg-[#f0fdf4]" />
+        <StatCard label="Unread Messages" value={stats.unreadContacts} icon="✉️" accent="bg-[#fef2f2]" />
       </div>
     </div>
   );
