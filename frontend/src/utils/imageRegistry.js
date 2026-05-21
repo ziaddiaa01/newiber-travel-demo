@@ -13,7 +13,7 @@ import Maritime from '../assets/vip2.jpg';
 import Private from '../assets/vip3.jpg';
 
 // Map the DB string to the imported variable
-export const imageMap = {
+export const masterImageMap = {
   "/images/hotel": hotel,
   "/images/limousine": limousine,
   "/images/managment": managment,
