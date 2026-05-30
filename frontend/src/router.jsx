@@ -5,7 +5,7 @@ import {
   fetchServices, 
   fetchTestimonials, 
   fetchFAQs, 
-  fetchService,
+  getDestinations, // Added,
   getAdminServices,
   getAdminTestimonials,
   getAdminFAQs,
@@ -40,14 +40,16 @@ const ContactsManager = lazy(() => import('./pages/admin/ContactsManager'));
 // Loaders
 export const homeLoader = async () => {
   // We trigger both requests in parallel for better performance
-  const [servicesRes, testimonialsRes] = await Promise.all([
+  const [servicesRes, testimonialsRes , destinationsRes] = await Promise.all([
     fetchServices(),
-    fetchTestimonials()
+    fetchTestimonials(),
+    getDestinations(),
   ]);
 
   return {
     services: servicesRes.data,
     testimonials: testimonialsRes.data,
+    destinations: destinationsRes.data, // Shared downstream to home view components
   };
 };
 // Admin loaders (protected)
