@@ -3,6 +3,8 @@ import React, { lazy, Suspense } from 'react';
 import App from './App';
 import { 
   fetchServices, 
+    fetchService,
+
   fetchTestimonials, 
   fetchFAQs, 
   getDestinations, // Added,
