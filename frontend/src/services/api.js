@@ -23,6 +23,8 @@ export const fetchServices = () => API.get('/services');
 export const fetchService = (id) => API.get(`/services/${id}`);
 export const fetchTestimonials = () => API.get('/testimonials');
 export const fetchFAQs = () => API.get('/faqs');
+export const getDestinations = () => API.get('/destinations');
+
 export const submitContact = (formData) => API.post('/contact', formData);
 // Admin endpoints (protected)
 export const adminLogin = (data) => API.post('/auth/login', data);
