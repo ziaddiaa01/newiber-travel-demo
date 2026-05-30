@@ -28,8 +28,9 @@ const VIP = () => {
   const { services } = useLoaderData();
 
  // Add a fallback to an empty array ([]) if services or services.data is undefined
-const vipServices = (services?.filter((s) => s.isVip).sort((a, b) => a.order - b.order);
-
+const vipServices = services
+  .filter((s) => s.isVip)
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
   if (!services) {
     return <div className="min-h-screen bg-[#0d0d0d] text-white">Loading...</div>;
   }
