@@ -6,11 +6,10 @@ const Destination = require('../models/Destination');
 // @route   GET /api/destinations
 // @desc    Get all destinations for the public masonry grid layout
 // @access  Public
-
 const getDestinations = async (req, res) => {
   try {
-    // Sort by newest first so recently added locations appear immediately
-const destinations = await Destination.find().sort('-createdAt');
+    // Fixed the syntax and chained sort by newest first (-createdAt)
+    const destinations = await Destination.find().sort('-createdAt');
     return res.status(200).json(destinations);
   } catch (error) {
     console.error('Error fetching destinations:', error);
@@ -22,9 +21,9 @@ const destinations = await Destination.find().sort('-createdAt');
 const getServices = async (req, res) => {
   try {
     const services = await Service.find().sort('order');
-    res.json(services);
+    return res.json(services);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 };
 
@@ -33,9 +32,9 @@ const getServiceById = async (req, res) => {
   try {
     const service = await Service.findById(req.params.id);
     if (!service) return res.status(404).json({ message: 'Service not found' });
-    res.json(service);
+    return res.json(service);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 };
 
@@ -43,9 +42,9 @@ const getServiceById = async (req, res) => {
 const getTestimonials = async (req, res) => {
   try {
     const testimonials = await Testimonial.find({ isVisible: true });
-    res.json(testimonials);
+    return res.json(testimonials);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 };
 
@@ -53,11 +52,17 @@ const getTestimonials = async (req, res) => {
 const getFAQs = async (req, res) => {
   try {
     const faqs = await FAQ.find({ isVisible: true }).sort('order');
-    res.json(faqs);
+    return res.json(faqs);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 };
 
-
-module.exports = { getServices, getServiceById, getTestimonials, getFAQs };
+// Added getDestinations to exports so your router can access it!
+module.exports = { 
+  getDestinations, 
+  getServices, 
+  getServiceById, 
+  getTestimonials, 
+  getFAQs 
+};
