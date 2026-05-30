@@ -3,7 +3,6 @@ import { useLoaderData, Link } from 'react-router-dom';
 import DynamicHeader from '../components/DynamicHeader';
 import Footer from '../components/Footer';
 import pyramids from '../assets/pyramids.png'
-import { masterImageMap } from '../utils/imageRegistry'; 
 
 const Services = () => {
   const { services } = useLoaderData();
@@ -81,7 +80,7 @@ const Services = () => {
                 className="block aspect-[4/3] overflow-hidden rounded-sm shadow-2xl group"
               >
                 <img 
-                  src={masterImageMap[service.imageUrl] || service.imageUrl}
+                  src={service.imageUrl}
                   alt={service.title} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                 />
