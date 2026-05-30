@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { submitContact } from '../services/api'; 
 import heroVideo from '../assets/Hero-video.mp4'; 
 import fallbackImage from '../assets/Hero-poster.png'; 
-
+import DestinationGrid from '../components/DestinationGrid';
 import Footer from '../components/Footer';
 import DynamicHeader from '../components/DynamicHeader';
 
@@ -17,8 +17,7 @@ const fadeInUp = {
 
 const Home = () => {
   // services and testimonials are already resolved arrays
-  const { services, testimonials } = useLoaderData();
-  
+const { services, testimonials, destinations } = useLoaderData();  
   // Form State
   const [formData, setFormData] = useState({ firstName: '', email: '', message: '' });
   const [status, setStatus] = useState({ loading: false, success: null });
@@ -101,7 +100,7 @@ const Home = () => {
           </Link>
         </motion.div>
       </section>
-
+<DestinationGrid destinations={destinations} />
       {/* --- SERVICES SECTION (DYNAMIC) --- */}
       <section className="py-24 bg-gray-50">
         <div className="container mx-auto px-6 text-center mb-16">
