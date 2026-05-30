@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { masterImageMap } from '../utils/imageRegistry';
 
 const ServiceList = ({ services }) => {
   return (
@@ -31,7 +30,7 @@ const ServiceList = ({ services }) => {
           </div>
           <div className="flex-1 w-full relative">
             <Link to={`/services/${service._id}`} className="block aspect-[4/3] overflow-hidden rounded-sm shadow-2xl group">
-              <img src={masterImageMap[service.imageUrl] || service.imageUrl} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={service.title} />
+              <img src={service.imageUrl} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={service.title} />
             </Link>
           </div>
         </div>
