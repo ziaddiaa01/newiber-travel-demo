@@ -10,7 +10,7 @@ const Destination = require('../models/Destination');
 const getDestinations = async (req, res) => {
   try {
     // Sort by newest first so recently added locations appear immediately
-    const destinations = await Destination.find();
+const destinations = await Destination.find().sort('-createdAt');
     return res.status(200).json(destinations);
   } catch (error) {
     console.error('Error fetching destinations:', error);
