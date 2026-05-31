@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { submitContact } from '../services/api'; 
 import heroVideo from '../assets/Hero-video.mp4'; 
 import fallbackImage from '../assets/Hero-poster.png'; 
-import DestinationGrid from ('../components/DestinationGrid'));
+import DestinationGrid from '../components/DestinationGrid';
 import Footer from '../components/Footer';
 import DynamicHeader from '../components/DynamicHeader';
 
