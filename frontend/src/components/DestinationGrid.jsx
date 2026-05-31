@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRouteLoaderData, useLoaderData } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
 
 const DestinationGrid = ({ destinations: passedDestinations }) => {
   // If you pass destinations as a prop, use that. 
