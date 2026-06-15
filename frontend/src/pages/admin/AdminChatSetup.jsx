@@ -8,7 +8,7 @@ const AdminChatSetup = () => {
 
   useEffect(() => {
     // Falls back to localhost:5000 if your environment variable isn't defined
-    const backendUrl = import."https://newiber-travel-demo.vercel.app/';
+    const backendUrl = "https://newiber-travel-demo.vercel.app/';
     
     // 1. Fetch immediate infrastructure status when the page mounts
     const checkStatus = async () => {
