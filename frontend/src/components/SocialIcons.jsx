@@ -7,7 +7,7 @@ import {
   FaYoutube, 
   FaXTwitter,
   FaPinterestP,
-  FaSnapchatGhost,
+  FaSnapchat, // 🌟 تم التصحيح هنا لـ FaSnapchat المعتمدة في الإندكس السادس
   FaThreads
 } from 'react-icons/fa6';
 
@@ -48,12 +48,12 @@ const SocialIcons = ({ variant }) => {
       link: "https://www.pinterest.com/newiber/" 
     },
     { 
-      Icon: FaSnapchatGhost, 
+      Icon: FaSnapchat, // 🌟 تم التحديث هنا أيضاً ليطابق الـ Import
       link: "https://www.snapchat.com/@newiber" 
     },
     { 
       Icon: FaThreads, 
-      link: "https://www.threads.com/@Newiber.travel" 
+      link: "https://www.threads.net/@Newiber.travel" // 🌟 تصحيح الدومين لـ .net عشان يفتح حساب الشركة مظبوط
     },
   ];
 
@@ -66,7 +66,6 @@ const SocialIcons = ({ variant }) => {
           target="_blank"
           rel="noopener noreferrer"
           className={`${circleBase} ${isBlue ? blueCircle : lightCircle}`}
-          title={Icon.name.replace('Fa', '')} 
         >
           <Icon className="text-sm" />
         </a>
