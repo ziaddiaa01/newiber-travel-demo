@@ -29,6 +29,7 @@ const Terms = lazy(() => import('./pages/Terms'));
 const Privacy = lazy(() => import('./pages/Privacy'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
+
 // Admin pages
 const AdminLogin = lazy(() => import('./pages/admin/Login'));
 const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
@@ -233,30 +234,14 @@ export const router = createBrowserRouter([
         index: true,
         element: <Navigate to="dashboard" replace />,
       },
-     {
-  path: 'dashboard',
-  element: (
-    <Suspense fallback={<LoadingSpinner />}>
-      <Dashboard />
-    </Suspense>
-  ),
-  // 🌟 تأكد من وجود هذا السطر بالكامل ليقوم بشحن الكروت الـ 5 بالبيانات
-  loader: async () => {
-    const [servicesRes, testimonialsRes, faqsRes, contactsRes] = await Promise.all([
-      getAdminServices(),
-      getAdminTestimonials(),
-      getAdminFAQs(),
-      getAdminContacts()
-    ]);
-
-    return {
-      services: servicesRes.data || [],
-      testimonials: testimonialsRes.data || [],
-      faqs: faqsRes.data || [],
-      contacts: contactsRes.data || []
-    };
-  }
-},
+      {
+        path: 'dashboard',
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <Dashboard />
+          </Suspense>
+        ),
+      },
       {
         path: 'services',
         element: (
