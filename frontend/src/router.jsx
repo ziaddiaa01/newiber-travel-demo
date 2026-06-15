@@ -3,16 +3,15 @@ import React, { lazy, Suspense } from 'react';
 import App from './App';
 import { 
   fetchServices, 
-    fetchService,
-
+  fetchService,
   fetchTestimonials, 
   fetchFAQs, 
-  getDestinations, // Added,
+  getDestinations, 
   getAdminServices,
   getAdminTestimonials,
   getAdminFAQs,
   getAdminContacts 
-} from './services/api'; // added admin API functions
+} from './services/api'; 
 import ProtectedRoute from './components/ProtectedRoute';
 import LoadingSpinner from './components/LoadingSpinner';
 
@@ -38,10 +37,10 @@ const ServicesManager = lazy(() => import('./pages/admin/ServicesManager'));
 const TestimonialsManager = lazy(() => import('./pages/admin/TestimonialsManager'));
 const FAQsManager = lazy(() => import('./pages/admin/FAQsManager'));
 const ContactsManager = lazy(() => import('./pages/admin/ContactsManager'));
+const AdminChatSetup = lazy(() => import('./pages/admin/AdminChatSetup')); // 🌟 ADDED: Lazy loaded WhatsApp Sync Component
 
 // Loaders
 export const homeLoader = async () => {
-  // We trigger both requests in parallel for better performance
   const [servicesRes, testimonialsRes , destinationsRes] = await Promise.all([
     fetchServices(),
     fetchTestimonials(),
@@ -51,9 +50,10 @@ export const homeLoader = async () => {
   return {
     services: servicesRes.data,
     testimonials: testimonialsRes.data,
-    destinations: destinationsRes.data, // Shared downstream to home view components
+    destinations: destinationsRes.data, 
   };
 };
+
 // Admin loaders (protected)
 const adminServicesLoader = async () => {
   const { data } = await getAdminServices();
@@ -80,19 +80,14 @@ const servicesLoader = async () => {
   return { services };
 };
 
-
-
-
-
-// If fetchServices returns axios response
 const vipLoader = async () => {
-  const response = await fetchServices(); // axios response object
-  const allServices = response.data;      // extract the actual array
+  const response = await fetchServices(); 
+  const allServices = response.data;      
   const vipServices = allServices.filter(service => service.isVip === true);
-  return { services: vipServices };       // return the filtered array wrapped in an object
+  return { services: vipServices };       
 };
+
 const serviceDetailLoader = async ({ params }) => {
-  // We use Promise.all to fetch both at the same time (faster)
   const [detailRes, listRes] = await Promise.all([
     fetchService(params.id),
     fetchServices()
@@ -100,7 +95,7 @@ const serviceDetailLoader = async ({ params }) => {
 
   return { 
     service: detailRes.data, 
-    allServices: listRes.data // This provides the data for the bottom list
+    allServices: listRes.data 
   };
 };
 
@@ -113,7 +108,6 @@ const testimonialsLoader = async () => {
   const testimonials = await fetchTestimonials();
   return { testimonials };
 };
-
 
 export const router = createBrowserRouter([
   {
@@ -171,7 +165,7 @@ export const router = createBrowserRouter([
             <VIP />
           </Suspense>
         ),
-        loader: vipLoader, // reuse services loader, filter VIP in component
+        loader: vipLoader, 
       },
       {
         path: 'testimonials',
@@ -282,6 +276,14 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
         loader: adminContactsLoader,
+      },
+      {
+        path: 'whatsapp-sync', // 🌟 ADDED: Protected route for scanning and configuration
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <AdminChatSetup />
+          </Suspense>
+        ),
       },
     ],
   },
