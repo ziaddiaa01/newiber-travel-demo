@@ -1,4 +1,5 @@
 import React from 'react';
+import io from 'socket.io-client';
 import { useLoaderData, Link } from 'react-router-dom';
 
 const StatCard = ({ label, value, icon, accent }) => (
