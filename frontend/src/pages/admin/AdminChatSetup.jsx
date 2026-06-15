@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'; // استيراد Link للربط بالـ Routes الحية
-import { getAdminServices, getAdminTestimonials, getAdminFAQs, getAdminContacts } from '../../services/api';
+import React from 'react';
+import { useLoaderData, Link } from 'react-router-dom';
 
 const StatCard = ({ label, value, icon, accent }) => (
   <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 h-full">
@@ -15,42 +14,27 @@ const StatCard = ({ label, value, icon, accent }) => (
 );
 
 const Dashboard = () => {
-  const [stats, setStats] = useState({ services: 0, testimonials: 0, faqs: 0, unreadContacts: 0 });
+  // 🌟 سحب البيانات المحملة مسبقاً من الـ Loader مباشرة
+  const { services = [], testimonials = [], faqs = [], contacts = [] } = useLoaderData() || {};
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const [services, testimonials, faqs, contacts] = await Promise.all([
-          getAdminServices(), getAdminTestimonials(), getAdminFAQs(), getAdminContacts()
-        ]);
-        setStats({
-          services: services.data.length,
-          testimonials: testimonials.data.length,
-          faqs: faqs.data.length,
-          unreadContacts: contacts.data.filter(c => !c.isRead).length,
-        });
-      } catch (error) {
-        console.error("❌ Failed to fetch dashboard stats:", error);
-      }
-    };
-    fetchStats();
-  }, []);
+  // حساب عدد الرسائل غير المقروءة بناءً على البيانات الحية
+  const unreadContactsCount = contacts.filter(c => !c.isRead).length;
 
   return (
     <div>
       <h1 className="text-2xl md:text-3xl font-bold text-[#0F2D52] mb-2">Dashboard</h1>
       <p className="text-gray-400 text-sm mb-8">Welcome back, here's what's happening.</p>
 
-      {/* الـ grid مقسم الآن إلى 5 أعمدة متناسقة xl:grid-cols-5 لتستوعب الكارت الخامس الجديد */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-        <StatCard label="Services" value={stats.services} icon="🛎️" accent="bg-[#e8f4fd]" />
-        <StatCard label="Testimonials" value={stats.testimonials} icon="⭐" accent="bg-[#fff8e1]" />
-        <StatCard label="FAQs" value={stats.faqs} icon="❓" accent="bg-[#f0fdf4]" />
-        <StatCard label="Unread Messages" value={stats.unreadContacts} icon="✉️" accent="bg-[#fef2f2]" />
+        {/* قراءة الـ length مباشرة من المصفوفات الجاهزة */}
+        <StatCard label="Services" value={services.length} icon="🛎️" accent="bg-[#e8f4fd]" />
+        <StatCard label="Testimonials" value={testimonials.length} icon="⭐" accent="bg-[#fff8e1]" />
+        <StatCard label="FAQs" value={faqs.length} icon="❓" accent="bg-[#f0fdf4]" />
+        <StatCard label="Unread Messages" value={unreadContactsCount} icon="✉️" accent="bg-[#fef2f2]" />
         
-        {/* 🌟 كارت إعدادات الـ WhatsApp والدردشة (مطابق للمسار الفعلي بالملي) */}
+        {/* كارت إعدادات الـ WhatsApp والدردشة الحية */}
         <Link 
-          to="/admin/whatsapp-sync" // 👈 تم التعديل إلى المسار الحقيقي الموجود في الـ Router الخاص بك
+          to="/admin/whatsapp-sync" 
           className="block group hover:scale-[1.02] transition-transform duration-200"
         >
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 h-full group-hover:border-blue-400 transition-colors duration-200">
