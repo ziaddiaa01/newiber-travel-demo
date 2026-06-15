@@ -1,7 +1,7 @@
 import React from 'react';
 import DynamicHeader from '../components/DynamicHeader';
 import Footer from '../components/Footer';
-import about from '../assets/about.png'
+import about from 'https://ymvejvzrljpnnwfautji.supabase.co/storage/v1/object/public/NEWIBER/about.svg'
 const About = () => {
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-blue-100">
