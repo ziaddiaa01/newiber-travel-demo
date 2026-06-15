@@ -233,14 +233,30 @@ export const router = createBrowserRouter([
         index: true,
         element: <Navigate to="dashboard" replace />,
       },
-      {
-        path: 'dashboard',
-        element: (
-          <Suspense fallback={<LoadingSpinner />}>
-            <Dashboard />
-          </Suspense>
-        ),
-      },
+     {
+  path: 'dashboard',
+  element: (
+    <Suspense fallback={<LoadingSpinner />}>
+      <Dashboard />
+    </Suspense>
+  ),
+  // 🌟 تأكد من وجود هذا السطر بالكامل ليقوم بشحن الكروت الـ 5 بالبيانات
+  loader: async () => {
+    const [servicesRes, testimonialsRes, faqsRes, contactsRes] = await Promise.all([
+      getAdminServices(),
+      getAdminTestimonials(),
+      getAdminFAQs(),
+      getAdminContacts()
+    ]);
+
+    return {
+      services: servicesRes.data || [],
+      testimonials: testimonialsRes.data || [],
+      faqs: faqsRes.data || [],
+      contacts: contactsRes.data || []
+    };
+  }
+},
       {
         path: 'services',
         element: (
