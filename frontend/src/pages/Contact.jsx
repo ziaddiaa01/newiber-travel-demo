@@ -14,8 +14,8 @@ import contactBg from '../assets/contact.jpg';
 
 const Contact = () => {
   // Catch the shared global layout context arrays from App.jsx outlet matrix
-  const [forcedOpenState, setForcedOpenState] = useOutletContext();
-
+const [, setForcedOpenState] = useOutletContext();
+  
   const fadeUp = {
     initial: { opacity: 0, y: 30 },
     animate: { opacity: 1, y: 0 },
