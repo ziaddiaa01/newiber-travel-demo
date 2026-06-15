@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import HeaderNav from './HeaderNav';
 import SocialIcons from './SocialIcons';
-import logo from '../assets/logo-solid.svg';
+import logo from 'https://ymvejvzrljpnnwfautji.supabase.co/storage/v1/object/public/NEWIBER/logo-solid.svg';
 
 const HeaderSolid = ({ isVisible, isFixed }) => {
   const [menuOpen, setMenuOpen] = useState(false);
