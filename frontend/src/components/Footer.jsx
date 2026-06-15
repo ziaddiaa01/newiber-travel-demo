@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "https://ymvejvzrljpnnwfautji.supabase.co/storage/v1/object/public/NEWIBER/logo-transparent.svg";
+import logo from "../assets/logo-transparent.svg";
 import SocialIcons from "./SocialIcons";
 
 const Footer = () => (
