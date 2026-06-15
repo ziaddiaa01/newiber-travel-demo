@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import HeaderNav from './HeaderNav';
 import SocialIcons from './SocialIcons';
-import logo from 'https://ymvejvzrljpnnwfautji.supabase.co/storage/v1/object/public/NEWIBER/logo-transparent.svg';
+import logo from '../assets/logo-transparent.svg';
 
 const HeaderTransparent = ({ isHidden }) => {
   const [menuOpen, setMenuOpen] = useState(false);
