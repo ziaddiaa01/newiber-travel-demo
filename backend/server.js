@@ -15,6 +15,9 @@ const ChatLog = require('./models/ChatLog');
 
 const app = express();
 
+// الدومين الحي المعتمد (يقرأ من البيئة أو يقع على فيرسيل الافتراضي)
+const ALLOWED_ORIGIN = process.env.CLIENT_URL || 'https://newiber-travel-demo.vercel.app';
+
 // ==========================================
 // 1. SECURITY & CORE MIDDLEWARES
 // ==========================================
@@ -24,7 +27,8 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      connectSrc: ["'self'", "ws:", "wss:", "http://localhost:5000"],
+      // 🌟 تعديل: السماح بالاتصالات من أي مكان في الإنتاج ودعم السوكت الحي
+      connectSrc: ["'self'", "ws:", "wss:", ALLOWED_ORIGIN, "http://localhost:5000"],
       imgSrc: ["'self'", "data:", "https://images.unsplash.com"],
     },
   },
@@ -33,16 +37,16 @@ app.use(helmet({
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS settings matching your local React/Vite development setup
+// CORS settings matching production and local environments
 app.use(cors({ 
-  origin: process.env.CLIENT_URL || 'http://localhost:5173', 
+  origin: [ALLOWED_ORIGIN, 'http://localhost:5173'], 
   credentials: true 
 }));
 
 // API Route Rate Limiter
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 200, // Raised safely to cover live chat socket polling and admin lookups
+  max: 200, 
   message: 'Too many requests from this IP, please try again later.'
 });
 app.use('/api', limiter);
@@ -83,14 +87,15 @@ app.use((err, req, res, next) => {
 // 3. DATABASE & SERVER INITIALIZATION
 // ==========================================
 
-// Create the standard HTTP base wrapper needed by Socket.io
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
-    credentials: true
-  }
+    origin: [ALLOWED_ORIGIN, 'http://localhost:5173'],
+    credentials: true,
+    methods: ["GET", "POST"]
+  },
+  transports: ['websocket', 'polling'] // دعم كفاءة قنوات الاتصال في البيئات السحابية
 });
 
 // Establish connection to your MongoDB Atlas cluster loop instance
@@ -110,8 +115,18 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/travel_db')
 // 4. REAL-TIME CHAT SOCKET CONTROLLER
 // ==========================================
 io.on('connection', (socket) => {
-  console.log(`Live widget connected: ${socket.id}`);
+  console.log(`Live widget/admin connected: ${socket.id}`);
   socket.join(socket.id);
+
+  // 🌟 الحل السحري لـ Race Condition:
+  // بمجرد دخول المسؤول (الآدمن) لصفحة السوكت، السيرفر يدفعه بأحدث حالة للوتساب فوراً دون انتظار!
+  const currentEngineState = getEngineState();
+  if (currentEngineState.isConnected) {
+    socket.emit('whatsapp_status', { connected: true });
+  } else if (currentEngineState.qrCodeString) {
+    // لو الـ QR متولد أوريدي وموجود في الـ EngineState، ابعته في نفس اللحظة
+    socket.emit('whatsapp_qr', { qrCodeString: currentEngineState.qrCodeString });
+  }
 
   // Fired when a customer types a text message inside the browser widget
   socket.on('send_msg_to_company', async (data) => {
@@ -119,7 +134,7 @@ io.on('connection', (socket) => {
     const whatsappSock = getWhatsAppSock();
     const engineState = getEngineState();
 
-    // Shield Layer: Halt operations if WhatsApp engine is booting or unauthenticated
+    // Shield Layer
     if (!whatsappSock || !engineState.isConnected || !whatsappSock.user) {
       console.log('⚠️ Transmit Denied: Device context missing or unauthenticated.');
       return socket.emit('error_log', { 
@@ -139,7 +154,6 @@ io.on('connection', (socket) => {
       // 2. Format a structured message template for the agent's phone view
       const routingTemplate = `📢 New Web Lead\n👤 Name: ${customerName}\n🆔 Session: ${socket.id}\n💬 Message: ${text}\n\n👉 Copy line below to reply directly to this client:\n[${socket.id}]: write message here`;
       
-      // Dynamic Target JID populated directly from your secure env files
       const targetCompanyJid = `${process.env.COMPANY_WHATSAPP_NUMBER}@s.whatsapp.net`;
 
       await whatsappSock.sendMessage(targetCompanyJid, { text: routingTemplate });
@@ -151,6 +165,6 @@ io.on('connection', (socket) => {
   });
 });
 
-// Start listening on your designated development profile port channel
+// 🌟 تعديل: البورت الديناميكي لـ Railway إجباري
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
