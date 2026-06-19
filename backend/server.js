@@ -16,7 +16,7 @@ const ChatLog = require('./models/ChatLog');
 const app = express();
 
 // الدومين الحي المعتمد (يقرأ من البيئة أو يقع على فيرسيل الافتراضي)
-const ALLOWED_ORIGIN = process.env.CLIENT_URL || 'https://travel.newiber.com';
+const ALLOWED_ORIGIN = process.env.CLIENT_URL || 'https://www.newiber.com';
 
 // ==========================================
 // 1. SECURITY & CORE MIDDLEWARES
