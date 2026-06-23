@@ -17,10 +17,11 @@ const app = express();
 
 // الدومين الحي المعتمد (يقرأ من البيئة أو يقع على فيرسيل الافتراضي)
 const ALLOWED_ORIGINS = [
-  process.env.CLIENT_URL,           // سيقرأ الرابط المكتوب في الـ env الخاص بـ Railway
-  'https://www.newiber.com',        // الرابط الرئيسي بـ www
-  'https://newiber.com',            // الرابط الرئيسي بدون www
-];
+  process.env.CLIENT_URL,
+  'https://www.newiber.com',
+  'https://newiber.com',
+  'http://localhost:3000',   // CRA's actual default dev port
+].filter(Boolean);
 // ==========================================
 // 1. SECURITY & CORE MIDDLEWARES
 // ==========================================
@@ -30,8 +31,7 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      // 🌟 تعديل: السماح بالاتصالات من أي مكان في الإنتاج ودعم السوكت الحي
-      connectSrc: ["'self'", "ws:", "wss:", ALLOWED_ORIGINS, "http://localhost:5000"],
+      connectSrc: ["'self'", "ws:", "wss:", ...ALLOWED_ORIGINS],
       imgSrc: ["'self'", "data:", "https://images.unsplash.com"],
     },
   },
@@ -41,15 +41,15 @@ app.use(express.json());
 app.use(cookieParser());
 
 // CORS settings matching production and local environments
-app.use(cors({ 
+app.use(cors({
   origin: function (origin, callback) {
     if (!origin || ALLOWED_ORIGINS.indexOf(origin) !== -1) {
-      callback(null, true); // سماح بالطلب
+      callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS')); // حظر الطلب
+      callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true // للسماح بمرور الـ Cookies والـ Sessions
+  credentials: true
 }));
 
 // API Route Rate Limiter
@@ -100,11 +100,11 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: [ALLOWED_ORIGINS, 'http://localhost:5173'],
+    origin: ALLOWED_ORIGINS,
     credentials: true,
     methods: ["GET", "POST"]
   },
-  transports: ['websocket', 'polling'] // دعم كفاءة قنوات الاتصال في البيئات السحابية
+  transports: ['websocket', 'polling']
 });
 
 // Establish connection to your MongoDB Atlas cluster loop instance
