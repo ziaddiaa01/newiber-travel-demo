@@ -31,7 +31,7 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       // 🌟 تعديل: السماح بالاتصالات من أي مكان في الإنتاج ودعم السوكت الحي
-      connectSrc: ["'self'", "ws:", "wss:", ALLOWED_ORIGIN, "http://localhost:5000"],
+      connectSrc: ["'self'", "ws:", "wss:", ALLOWED_ORIGINS, "http://localhost:5000"],
       imgSrc: ["'self'", "data:", "https://images.unsplash.com"],
     },
   },
