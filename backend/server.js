@@ -16,8 +16,11 @@ const ChatLog = require('./models/ChatLog');
 const app = express();
 
 // الدومين الحي المعتمد (يقرأ من البيئة أو يقع على فيرسيل الافتراضي)
-const ALLOWED_ORIGIN = process.env.CLIENT_URL || 'https://www.newiber.com';
-
+const ALLOWED_ORIGINS = [
+  process.env.CLIENT_URL,           // سيقرأ الرابط المكتوب في الـ env الخاص بـ Railway
+  'https://www.newiber.com',        // الرابط الرئيسي بـ www
+  'https://newiber.com',            // الرابط الرئيسي بدون www
+];
 // ==========================================
 // 1. SECURITY & CORE MIDDLEWARES
 // ==========================================
@@ -39,8 +42,14 @@ app.use(cookieParser());
 
 // CORS settings matching production and local environments
 app.use(cors({ 
-  origin: [ALLOWED_ORIGIN, 'http://localhost:5173'], 
-  credentials: true 
+  origin: function (origin, callback) {
+    if (!origin || ALLOWED_ORIGINS.indexOf(origin) !== -1) {
+      callback(null, true); // سماح بالطلب
+    } else {
+      callback(new Error('Not allowed by CORS')); // حظر الطلب
+    }
+  },
+  credentials: true // للسماح بمرور الـ Cookies والـ Sessions
 }));
 
 // API Route Rate Limiter
