@@ -27,7 +27,7 @@ const ChatWidget = ({ companyName = "NEWIBER Travel", companyLogo, forcedOpenSta
     // 🌟 تأكيد إيقاف التكرار برمجياً للأمان (يشتغل مرة واحدة فقط ويموت)
     audioRef.current.loop = false;
 
-    const backendUrl = import.meta.env.CLIENT_URL || 'https://travel.newiber.com/';
+    const backendUrl = 'https://newiber-travel-demo-production.up.railway.app/';
     socketRef.current = io(backendUrl, { withCredentials: true });
 
     // الاستماع لردود الواتساب القادمة من السيرفر
